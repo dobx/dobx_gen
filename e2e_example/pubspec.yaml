@@ -1,0 +1,11 @@
+name: dobx_gen_e2e_example
+description: dobx_gen example
+version: 0.1.0
+
+dependencies:
+  dobx_gen:
+    path: ..
+
+dev_dependencies:
+  build_runner: ^0.3.0+1
+
