@@ -1,6 +1,8 @@
 name: dobx_gen
 description: generate dobx observables for your classes
 version: 0.1.0
+author: dyu <davidyu@cebu.io>
+homepage: https://github.com/dobx/dobx_gen
 
 dependencies:
   source_gen: ^0.5.4+2
