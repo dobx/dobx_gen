@@ -6,10 +6,13 @@ import 'package:dobx_gen/core.dart';
 part 'hello.g.dart';
 
 @dobx
-class Todo {
+abstract class Todo {
 
   String title;
   bool completed;
 
-  factory Todo() => _$Todo();
+  factory Todo() => _$Todo(
+    title: 'hello, world!',
+    completed: false,
+  );
 }

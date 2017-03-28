@@ -4,7 +4,7 @@ part of hello;
 
 // **************************************************************************
 // Generator: DobxGenerator
-// Target: class Todo
+// Target: abstract class Todo
 // **************************************************************************
 
 class _Todo extends PubSub implements Todo {
@@ -33,6 +33,11 @@ class _Todo extends PubSub implements Todo {
   }
 }
 
-Todo _$Todo() {
-  return new _Todo();
+Todo _$Todo({
+  String title: '',
+  bool completed: false,
+}) {
+  return new _Todo()
+    .._title = title
+    .._completed = completed;
 }

@@ -37,37 +37,47 @@ class DobxGenerator extends GeneratorForAnnotation<Dobx> {
           todo: 'Remove the @dobx annotation from `$friendlyName`.');
     }
 
-    final classElement = element as ClassElement,
-        name = classElement.name,
-        buf = new StringBuffer();
+    final ce = element as ClassElement;
+    return _implClass(ce);
+    //return annotation.mixin ? _subClass(ce) : _implClass(ce);
+  }
 
-    var i = 0;
-    for (var fe in classElement.fields) {
-      buf.writeln(fieldDecl(fe));
-      buf.writeln(fieldMethod(fe, ++i));
+  String _implClass(ClassElement ce) {
+    var name = ce.name,
+        body = new StringBuffer(),
+        params = new StringBuffer(),
+        assign_params = new StringBuffer(),
+        i = 0;
+
+    String val;
+    for (var fe in ce.fields) {
+      val = _defaultValue(fe);
+      // the compiler allows '=' to assing default value but build_runner complains about it
+      params.writeln('${fe.type.name} ${fe.name} : $val,');
+      assign_params.writeln('.._${fe.name} = ${fe.name}');
+      body.writeln('${fe.type.name} _${fe.name};');
+      body.writeln(_implMethod(++i, fe.type.name, fe.name, val));
     }
 
     return '''
     class _$name extends PubSub implements $name {
-      $buf
+      $body
     }
-    $name _\$$name() { return new _$name(); }
+    $name _\$$name({
+      $params
+    }) {
+      return new _$name()
+        $assign_params;
+    }
     ''';
   }
 
-  String fieldDecl(FieldElement fe) {
-    return '${fe.type.name} _${fe.name};';
-  }
-
-  String fieldMethod(FieldElement fe, int id) {
-    final name = fe.name,
-      type = fe.type.name;
-
+  String _implMethod(int id, String type, String name, String val) {
     return '''
     $type get $name { \$sub($id); return _$name; }
     void set $name($type $name) {
       if ($name != null && $name == _$name) return;
-      _$name = $name ?? ${_defaultValue(fe)};
+      _$name = $name ?? $val;
       \$pub($id);
     }
     ''';
@@ -77,7 +87,35 @@ class DobxGenerator extends GeneratorForAnnotation<Dobx> {
     switch (fe.type.name) {
       case 'String': return "''";
       case 'bool': return 'false';
-      default: return '0';
+      case 'double': return '0.0';
+      case 'num': return '0';
+      case 'int': return '0';
+      default: return 'null';
     }
   }
+
+  /*bool _isPrivateField(FieldElement fe) {
+    // starts with '_'
+    return 95 == fe.name.codeUnitAt(0);
+  }
+
+  String _subClass(ClassElement ce) {
+    var name = ce.name,
+        buf = new StringBuffer(),
+        i = 0;
+
+    String val;
+    for (var fe in ce.fields) {
+      if (_isPrivateField(fe) && 'null' != (val = _defaultValue(fe)))
+        buf.writeln(_implMethod(++i, fe.type.name, fe.name.substring(1), val));
+    }
+
+    return '''
+    class _$name extends $name with PubSub {
+      _$name();
+      $buf
+    }
+    $name _\$$name() { return new _$name(); }
+    ''';
+  }*/
 }

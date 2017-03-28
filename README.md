@@ -12,12 +12,15 @@ import 'package:dobx_gen/core.dart';
 part 'hello.g.dart';
 
 @dobx
-class Todo {
+abstract class Todo {
 
   String title;
   bool completed;
 
-  factory Todo() => _$Todo(); // this method is generated
+  factory Todo() => _$Todo( // this method is generated
+    title: 'hello, world!',
+    completed: false,
+  );
 }
 ```
 
