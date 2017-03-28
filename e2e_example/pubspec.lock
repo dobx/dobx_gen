@@ -91,6 +91,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.16"
+  dobx:
+    description:
+      name: dobx
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.0"
   dobx_gen:
     description:
       path: ".."

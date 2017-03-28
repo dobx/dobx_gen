@@ -3,6 +3,7 @@ description: dobx_gen example
 version: 0.1.0
 
 dependencies:
+  dobx: ^0.7.0
   dobx_gen:
     path: ..
 
