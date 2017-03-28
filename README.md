@@ -1,5 +1,5 @@
 # dobx_gen
-Generate dobx observables via [source_gen](https://github.com/dart-lang/source_gen)
+Generate [dobx](https://github.com/dobx/dobx) observables via [source_gen](https://github.com/dart-lang/source_gen)
 
 ## Example
 ### lib/todo.dart
