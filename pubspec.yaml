@@ -4,6 +4,9 @@ version: 0.1.0
 author: dyu <davidyu@cebu.io>
 homepage: https://github.com/dobx/dobx_gen
 
+environment:
+  sdk: '>=1.21.0 <2.0.0'
+
 dependencies:
   source_gen: ^0.5.4+2
 
