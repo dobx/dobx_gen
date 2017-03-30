@@ -49,14 +49,20 @@ class DobxGenerator extends GeneratorForAnnotation<Dobx> {
         assign_params = new StringBuffer(),
         i = 0;
 
-    String val;
+    String ftype, fname, fval;
     for (var fe in ce.fields) {
-      val = _defaultValue(fe);
+      if (fe.isStatic)
+        continue;
+
+      ftype = fe.type.name;
+      fname = fe.name;
+      fval = _defaultValue(ftype);
+
       // the compiler allows '=' to assing default value but build_runner complains about it
-      params.writeln('${fe.type.name} ${fe.name} : $val,');
-      assign_params.writeln('.._${fe.name} = ${fe.name}');
-      body.writeln('${fe.type.name} _${fe.name};');
-      body.writeln(_implMethod(++i, fe.type.name, fe.name, val));
+      params.writeln('${ftype} ${fname} : $fval,');
+      assign_params.writeln('.._${fname} = ${fname}');
+      body.writeln('${ftype} _${fname};');
+      body.writeln(_implMethod(++i, ftype, fname, fval));
     }
 
     return '''
@@ -83,8 +89,8 @@ class DobxGenerator extends GeneratorForAnnotation<Dobx> {
     ''';
   }
 
-  String _defaultValue(FieldElement fe) {
-    switch (fe.type.name) {
+  String _defaultValue(String type) {
+    switch (type) {
       case 'String': return "''";
       case 'bool': return 'false';
       case 'double': return '0.0';
